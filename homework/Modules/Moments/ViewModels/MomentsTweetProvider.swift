@@ -10,21 +10,100 @@ import Foundation
 
 class MomentsTweetProvider: BaseViewModel {
     
-    let tweets = BehaviorRelay<[Moments.Tweet]>(value: [])
+    typealias Tweet = Moments.Tweet
     
-    private typealias Tweet = Moments.Tweet
+    let tweets = BehaviorRelay<[Tweet]>(value: [])
+    
+    let pageControl = PublishRelay<(isRefresh: Bool, hasData: Bool, hasMore: Bool)>()
+    
+    let refresh = PublishRelay<Void>()
+    
+    let loadmore = PublishRelay<Void>()
     
     private var dataSource: [Tweet] = []
+    
+    private var next: Int = 0
+    
+    private let pageQueue = DispatchQueue(label: "MomentsTweetProvider.pageQueue")
     
     // MARK: Override
     
     override func loadScripts() {
         super.loadScripts()
+        
+        let request = { [unowned self] (isRefresh: Bool, start: Int, count: Int) in
+            self.pageQueue.async {
+                let (result, next, hasMore) = self.page(self.dataSource, start: start, count: count)
+                self.next = next
+                DispatchQueue.main.async {
+                    let value: [Tweet]
+                    if isRefresh {
+                        value = result
+                    } else {
+                        value = self.tweets.value + result
+                    }
+                    self.tweets.accept(value)
+                    self.pageControl.accept((isRefresh, result.count > 0, hasMore))
+                }
+            }
+        }
+        
+        Observable<Bool>.merge([
+            refresh.doNext(on: { [unowned self] _ in self.next = 0 }).map({ true }),
+            loadmore.map({ false })
+        ]).map({ [unowned self] (isRefresh) in
+            return (isRefresh, self.next, 5)
+        }).subscribeNext(on: request).disposed(by: rx.dsbag)
     }
 }
 
-// MARK: - Private
+// MARK: - Page Control
 extension MomentsTweetProvider {
+    
+    func page(
+        _ dataSource: [Tweet],
+        start: Int,
+        count: Int) -> (result: [Tweet], next: Int, hasMore: Bool)
+    {
+        var result: [Tweet]
+        var next = start + count
+        var hasMore = true
+        let totalCount = dataSource.count
+        if totalCount <= start {
+            result = []
+            next = start
+            hasMore = false
+        } else if totalCount < next {
+            result = Array(dataSource[start ..< totalCount]).filter({ self.checkTweet($0) })
+            next = totalCount
+            hasMore = false
+        } else {
+            result = Array(dataSource[start ..< next]).filter({ self.checkTweet($0) })
+            if result.count < count {
+                self.addPagedResult(&result, with: &next, from: dataSource, toPageCount: count)
+            }
+            if next >= dataSource.count {
+                hasMore = false
+            }
+        }
+        return (result, next, hasMore)
+    }
+    
+    private func addPagedResult(
+        _ pagedResult: inout [Tweet],
+        with index: inout Int,
+        from dataSource: [Tweet],
+        toPageCount count: Int)
+    {
+        guard pagedResult.count < count else { return }
+        guard dataSource.count > index else { return }
+        let element = dataSource[index]
+        if checkTweet(element) {
+            pagedResult.append(element)
+        }
+        index += 1
+        addPagedResult(&pagedResult, with: &index, from: dataSource, toPageCount: count)
+    }
     
     private enum ModelType {
         case invalid
@@ -47,9 +126,13 @@ extension MomentsTweetProvider {
         }
     }
     
-    private func checkIvalid(_ tweet: Tweet) -> Bool {
+    func checkTweet(_ tweet: Tweet) -> Bool {
         return ModelType(tweet) != .invalid
     }
+}
+    
+// MARK: - Map Model
+extension MomentsTweetProvider {
     
     private typealias TextModel = MomentsTweetTextCell.Model
     private typealias PhotoModel = MomentsTweetPhotoCell.Model
@@ -90,7 +173,7 @@ extension MomentsTweetProvider {
     
     func updateDataSource() {
         Moments.provider.rx.request(.tweets)
-            .map([Moments.Tweet].self)
+            .map([Tweet].self)
             .retry(3)
             .filter({ (response) -> Bool in
                 // 就目前返回的数据模型分析, 以是否存在可用数据判断结果是否有效
@@ -98,6 +181,11 @@ extension MomentsTweetProvider {
             })
             .subscribe(onSuccess: { [unowned self] (response) in
                 self.dataSource = response
+                DispatchQueue.main.async {
+                    if self.tweets.value.count == 0 {
+                        self.refresh.accept(())
+                    }
+                }
             })
             .disposed(by: rx.dsbag)
     }

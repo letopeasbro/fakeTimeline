@@ -33,6 +33,20 @@ private extension MomentsViewController {
     func initializeSubviews() {
         view.backgroundColor = .white
         
+        let refreshHeader = MJRefreshNormalHeader { [weak self] in
+            self?.tweetProvider.refresh.accept(())
+        }
+        refreshHeader?.stateLabel.isHidden = true
+        refreshHeader?.lastUpdatedTimeLabel.isHidden = true
+        tableView.mj_header = refreshHeader
+        
+        let loadmoreFooter = MJRefreshAutoNormalFooter(refreshingBlock: { [weak self] in
+            self?.tweetProvider.loadmore.accept(())
+        })
+        loadmoreFooter?.isHidden = true
+        loadmoreFooter?.endRefreshingWithNoMoreData()
+        tableView.mj_footer = loadmoreFooter
+        
         tableView.tableHeaderView = topView
         tableView.dataSource = tweetProvider
         tableView.delegate = tweetProvider
@@ -40,11 +54,29 @@ private extension MomentsViewController {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+        if let header = tableView.mj_header {
+            tableView.bringSubviewToFront(header)
+        }
     }
     
     func loadScripts() {
         tweetProvider.tweets.subscribeNext(on: { [unowned self] _ in
             self.tableView.reloadData()
+        }).disposed(by: rx.dsbag)
+        
+        tweetProvider.pageControl.subscribeNext(on: { [unowned self] isRefresh, hasData, hasMore in
+            if isRefresh {
+                self.tableView.mj_header?.endRefreshing()
+                self.tableView.mj_footer?.isHidden = false
+            } else {
+                self.tableView.mj_footer?.endRefreshing()
+            }
+            if hasMore {
+                self.tableView.mj_footer?.resetNoMoreData()
+            } else {
+                self.tableView.mj_footer?.endRefreshingWithNoMoreData()
+            }
         }).disposed(by: rx.dsbag)
     }
 }
