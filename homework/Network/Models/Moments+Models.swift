@@ -8,12 +8,32 @@
 
 import Foundation
 
-enum Moments {}
+// MARK: - Tweet
+extension Moments {
+    
+    struct Tweet: Decodable {
+        
+        let content: String?
+        
+        let images: [ImageModel]?
+        
+        let sender: User.Card?
+        
+        let comments: [Comment]?
+        
+        enum CodingKeys: String, CodingKey {
+            case content
+            case images
+            case sender
+            case comments
+        }
+    }
+}
 
 // MARK: - Comment
 extension Moments {
     
-    struct Comment {
+    struct Comment: Decodable {
         
         let content: String?
         

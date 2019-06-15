@@ -23,6 +23,7 @@ class MomentsViewController: UIViewController {
         super.viewDidLoad()
         initializeSubviews()
         loadScripts()
+        tweetProvider.updateDataSource()
     }
 }
 
@@ -42,6 +43,8 @@ private extension MomentsViewController {
     }
     
     func loadScripts() {
-        
+        tweetProvider.tweets.subscribeNext(on: { [unowned self] _ in
+            self.tableView.reloadData()
+        }).disposed(by: rx.dsbag)
     }
 }

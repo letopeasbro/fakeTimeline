@@ -15,9 +15,9 @@ class MomentsTweetCell<Content>: UITableViewCell {
     
     struct Model {
         let avatarURL: URL?
-        let nickname: String
+        let nickname: String?
         let content: Content
-        let comments: [Moments.Comment]
+        let comments: [Moments.Comment]?
     }
     
     /// 渲染数据模型

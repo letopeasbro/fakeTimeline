@@ -12,7 +12,7 @@ class MomentsTweetMultipictureCell: MomentsTweetCell<MomentsTweetMultipictureCel
     
     struct Content {
         let text: String?
-        let pictureURLs: [URL]
+        let pictureURLs: [URL?]
     }
     
     private let contentLabel = UILabel(.withHex(0x222222), .regularFont(ofSize: 18), numberOfLines: 0)

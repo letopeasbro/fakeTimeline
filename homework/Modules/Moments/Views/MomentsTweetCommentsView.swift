@@ -63,7 +63,7 @@ extension MomentsTweetCommentsView {
         let labels = Array(reusableLabels[0 ..< needs])
         // 将未取出的Label约束清除
         Array(reusableLabels[needs ..< reusableLabels.count]).forEach({
-            $0.snp.removeConstraints()
+            $0.constraints.forEach({ $0.isActive = false })
         })
         return labels
     }
@@ -95,12 +95,14 @@ extension MomentsTweetCommentsView {
 // MARK: - Public
 extension MomentsTweetCommentsView {
     
-    func config(_ comments:[Moments.Comment]) {
-        backgroundImageView.isHidden = comments.count <= 0
-        ensureReusableLabelsEnough(comments.count)
-        let labels = dequeueNeededLabels(comments.count)
+    func config(_ comments: [Moments.Comment]?) {
+        let commentsCount = comments?.count ?? 0
+        backgroundImageView.isHidden = commentsCount <= 0
+        ensureReusableLabelsEnough(commentsCount)
+        let labels = dequeueNeededLabels(commentsCount)
         labels.enumerated().forEach { (idx, label) in
-            let comment = comments[idx]
+            guard let cmts = comments else { return }
+            let comment = cmts[idx]
             label.config(comment.sender?.nickname ?? "", receiverName: nil, text: comment.content ?? " ")
         }
         relayoutLabels(labels)

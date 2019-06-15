@@ -11,6 +11,12 @@
 		3389696FF4F3A4019CB4E726 /* Pods_homeworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2DE4B2DCF57B58D0278C69A /* Pods_homeworkTests.framework */; };
 		9B1189B622B4CCD300C4AA18 /* MomentsTweetCommentLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1189B522B4CCD300C4AA18 /* MomentsTweetCommentLabel.swift */; };
 		9B1189BB22B4DA0500C4AA18 /* User+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1189BA22B4DA0500C4AA18 /* User+Models.swift */; };
+		9B209B4322B4F0190084E2BF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B4222B4F0190084E2BF /* User.swift */; };
+		9B209B4522B4F0330084E2BF /* Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B4422B4F0330084E2BF /* Moments.swift */; };
+		9B209B4722B4F0580084E2BF /* User+Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B4622B4F0580084E2BF /* User+Provider.swift */; };
+		9B209B4A22B4F0F60084E2BF /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B4922B4F0F60084E2BF /* APIController.swift */; };
+		9B209B4E22B4F3850084E2BF /* Moments+Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B4D22B4F3850084E2BF /* Moments+Provider.swift */; };
+		9B209B5222B5071F0084E2BF /* BaseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B5122B5071F0084E2BF /* BaseModels.swift */; };
 		9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884422B3FFEC005B65F6 /* Moments+Models.swift */; };
 		9B38884722B400FF005B65F6 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884622B400FE005B65F6 /* NSObject+Rx.swift */; };
 		9B38884922B40192005B65F6 /* Observable+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884822B40192005B65F6 /* Observable+Conveniences.swift */; };
@@ -66,6 +72,12 @@
 		934B11C75926ABCB9EA598C6 /* Pods-homeworkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-homeworkUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-homeworkUITests/Pods-homeworkUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9B1189B522B4CCD300C4AA18 /* MomentsTweetCommentLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsTweetCommentLabel.swift; sourceTree = "<group>"; };
 		9B1189BA22B4DA0500C4AA18 /* User+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Models.swift"; sourceTree = "<group>"; };
+		9B209B4222B4F0190084E2BF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9B209B4422B4F0330084E2BF /* Moments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moments.swift; sourceTree = "<group>"; };
+		9B209B4622B4F0580084E2BF /* User+Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Provider.swift"; sourceTree = "<group>"; };
+		9B209B4922B4F0F60084E2BF /* APIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
+		9B209B4D22B4F3850084E2BF /* Moments+Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moments+Provider.swift"; sourceTree = "<group>"; };
+		9B209B5122B5071F0084E2BF /* BaseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModels.swift; sourceTree = "<group>"; };
 		9B38884422B3FFEC005B65F6 /* Moments+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moments+Models.swift"; sourceTree = "<group>"; };
 		9B38884622B400FE005B65F6 /* NSObject+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
 		9B38884822B40192005B65F6 /* Observable+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Conveniences.swift"; sourceTree = "<group>"; };
@@ -158,9 +170,38 @@
 		9B1189B722B4D9EA00C4AA18 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				9B209B4822B4F0BF0084E2BF /* Core */,
+				9B209B4122B4EFF70084E2BF /* Namespace */,
+				9B209B4022B4EFEB0084E2BF /* Providers */,
 				9BB8027222B27DE1002C646C /* Models */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		9B209B4022B4EFEB0084E2BF /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				9B209B4622B4F0580084E2BF /* User+Provider.swift */,
+				9B209B4D22B4F3850084E2BF /* Moments+Provider.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		9B209B4122B4EFF70084E2BF /* Namespace */ = {
+			isa = PBXGroup;
+			children = (
+				9B209B4222B4F0190084E2BF /* User.swift */,
+				9B209B4422B4F0330084E2BF /* Moments.swift */,
+			);
+			path = Namespace;
+			sourceTree = "<group>";
+		};
+		9B209B4822B4F0BF0084E2BF /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9B209B4922B4F0F60084E2BF /* APIController.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		9BB8023322B27D24002C646C = {
@@ -255,6 +296,7 @@
 		9BB8027222B27DE1002C646C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9B209B5122B5071F0084E2BF /* BaseModels.swift */,
 				9B1189BA22B4DA0500C4AA18 /* User+Models.swift */,
 				9B38884422B3FFEC005B65F6 /* Moments+Models.swift */,
 			);
@@ -442,14 +484,24 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-homework/Pods-homework-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,9 +582,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B209B4A22B4F0F60084E2BF /* APIController.swift in Sources */,
 				9B38884F22B4107F005B65F6 /* UITableView+EasyReuse.swift in Sources */,
 				9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */,
 				9BB8027F22B2A1EE002C646C /* MomentsTweetMultipictureCell.swift in Sources */,
+				9B209B5222B5071F0084E2BF /* BaseModels.swift in Sources */,
+				9B209B4522B4F0330084E2BF /* Moments.swift in Sources */,
+				9B209B4322B4F0190084E2BF /* User.swift in Sources */,
 				9BB8026F22B27DAC002C646C /* MomentsViewController.swift in Sources */,
 				9BB8027B22B29BC2002C646C /* MomentsTweetPhotoCell.swift in Sources */,
 				9BB8027722B29696002C646C /* BaseViewModel.swift in Sources */,
@@ -550,8 +606,10 @@
 				9BB8028A22B2A78D002C646C /* UIColor+Conveniences.swift in Sources */,
 				9B1189BB22B4DA0500C4AA18 /* User+Models.swift in Sources */,
 				9BB8028222B2A246002C646C /* AvatarView.swift in Sources */,
+				9B209B4722B4F0580084E2BF /* User+Provider.swift in Sources */,
 				9B38884B22B4063F005B65F6 /* SquaredBoxView.swift in Sources */,
 				9BB8027422B2964F002C646C /* MomentsTweetProvider.swift in Sources */,
+				9B209B4E22B4F3850084E2BF /* Moments+Provider.swift in Sources */,
 				9BB8029722B2B807002C646C /* UIScreen+Conveniences.swift in Sources */,
 				9B38884722B400FF005B65F6 /* NSObject+Rx.swift in Sources */,
 			);

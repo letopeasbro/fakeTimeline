@@ -8,8 +8,6 @@
 
 import Foundation
 
-enum User {}
-
 // MARK: - Profile
 extension User {
     

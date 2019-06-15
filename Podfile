@@ -7,6 +7,8 @@ target 'homework' do
 
   # Pods for homework
 
+  pod 'Alamofire'
+  pod 'Moya/RxSwift'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SnapKit'

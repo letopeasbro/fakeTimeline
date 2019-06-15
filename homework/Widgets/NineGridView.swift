@@ -40,7 +40,7 @@ extension NineGridView {
 // MARK: - Public
 extension NineGridView {
     
-    func requestPictures(_ urls: [URL]) {
+    func requestPictures(_ urls: [URL?]) {
         let count = urls.count
         gridView.showSquaresCount(UInt(count))
         for (idx, url) in urls.enumerated() {
