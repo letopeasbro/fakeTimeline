@@ -40,7 +40,9 @@ class MomentsTweetPhotoCell: MomentsTweetCell<MomentsTweetPhotoCell.Content> {
         
         model.subscribeNext(on: { [unowned self] model in
             self.contentLabel.text = model.content.text
-            print("下载图片:\(model.content.photoURL)")
+            self.photoView.setImage(model.content.photoURL, placeholder: nil, transform: nil, completion: { (image, _, _, _) in
+                self.photoView.image = image
+            })
         }).disposed(by: rx.dsbag)
     }
 }

@@ -32,6 +32,18 @@ extension AvatarView {
     ///   - url: 头像地址
     ///   - sideLength: 头像视图边长, 传入nil则使用bounds.height
     func setAvatar(_ url: URL?, sideLength: CGFloat? = nil) {
-        
+        let cornerRatio = cornerRadius / (sideLength ?? bounds.height)
+        setImage(url, placeholder: nil, transform: { (image) -> UIImage? in
+            let frame = CGRect(origin: .zero, size: image.size)
+            UIGraphicsBeginImageContextWithOptions(frame.size, false, image.scale)
+            let path = UIBezierPath(roundedRect: frame, cornerRadius: image.size.height * cornerRatio)
+            path.addClip()
+            image.draw(in: frame)
+            let result = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return result
+        }) { (image, _, fromType, state) in
+            self.image = image
+        }
     }
 }

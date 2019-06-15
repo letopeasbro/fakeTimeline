@@ -13,15 +13,17 @@ class SquaredBoxView<Square>: UIView where Square: UIView {
     
     var interval: CGFloat = 0.0
     
+    private(set) var squareBox = [Square]()
+    
     private let squaresCount: Int
     
-    private var shouldShowSquaresCount: UInt
+    private let sideLength: CGFloat
     
-    init(squaresCount v1: Int) {
+    init(squaresCount v1: Int, sideLength v2: CGFloat) {
         let r = Int(sqrt(Double(v1)))
         assert(v1 > 0 && r * r == v1, "方块数量设置错误")
         squaresCount = v1
-        shouldShowSquaresCount = UInt(v1)
+        sideLength = v2
         super.init(frame: .zero)
         initializeSubviews()
     }
@@ -29,50 +31,62 @@ class SquaredBoxView<Square>: UIView where Square: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private let originTag = 2918
-    
-    // MARK: Override
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        subviews.forEach({ $0.snp.removeConstraints() })
-        let countPerLine = Int(sqrt(Double(squaresCount)))
-        let length: CGFloat = (bounds.width - CGFloat(countPerLine - 1) * interval) / CGFloat(countPerLine)
-        for i in 0 ..< squaresCount {
-            if let square = squareView(at: i) {
-                guard i < shouldShowSquaresCount else { continue }
-                let topInset = CGFloat(i / countPerLine) * (interval + length)
-                let leadingInset = CGFloat(i % countPerLine) * (interval + length)
-                square.snp.makeConstraints { (make) in
-                    make.top.equalTo(topInset)
-                    make.leading.equalTo(leadingInset)
-                    if i % countPerLine == countPerLine - 1 {
-                        make.trailing.equalToSuperview()
-                    } else {
-                        make.trailing.lessThanOrEqualToSuperview()
-                    }
-                    if i == shouldShowSquaresCount - 1 {
-                        make.bottom.equalToSuperview()
-                    } else {
-                        make.bottom.lessThanOrEqualToSuperview()
-                    }
-                    make.size.equalTo(length)
-                }
-            }
-        }
-    }
 }
 
 // MARK: - Private
 extension SquaredBoxView {
     
     private func initializeSubviews() {
-        for i in 0 ..< squaresCount {
+        for _ in 0 ..< squaresCount {
             let squareView = Square()
-            squareView.tag = originTag + i
             addSubview(squareView)
+            squareBox.append(squareView)
+        }
+    }
+    
+    private func dequeueNeededSquares(_ needs: Int) -> [Square] {
+        let count = squareBox.count < needs ? squareBox.count : needs
+        let squares = Array(squareBox[0 ..< count])
+        // 将未取出的Label约束清除
+        Array(squareBox[count ..< squareBox.count]).forEach({
+            $0.constraints.forEach({ $0.isActive = false })
+        })
+        return squares
+    }
+    
+    private func relayoutSquares(_ squares: [Square]) {
+        let countPerLine = Int(sqrt(Double(squaresCount)))
+        var vConstraintItem: ConstraintItem = snp.top
+        var hConstraintItem: ConstraintItem = snp.leading
+        squares.enumerated().forEach { (i, square) in
+            defer {
+                hConstraintItem = square.snp.trailing
+                if i % countPerLine == countPerLine - 1 {
+                    // 行尾
+                    vConstraintItem = square.snp.bottom
+                    hConstraintItem = snp.leading
+                }
+            }
+            guard square.constraints.count == 0 else { return }
+            // 保证垂直方向上的间隔
+            let topInset = i / countPerLine > 0 ? 5 : 0
+            // 保证水平方向上的间隔
+            let leadingInset = i % countPerLine > 0 ? 5 : 0
+            square.snp.makeConstraints({ (make) in
+                make.top.equalTo(vConstraintItem).offset(topInset)
+                make.leading.equalTo(hConstraintItem).offset(leadingInset)
+                if i % countPerLine == countPerLine - 1 {
+                    make.trailing.equalToSuperview()
+                } else {
+                    make.trailing.lessThanOrEqualToSuperview()
+                }
+                if i / countPerLine == countPerLine - 1 {
+                    make.bottom.equalToSuperview()
+                } else {
+                    make.bottom.lessThanOrEqualToSuperview()
+                }
+                make.size.equalTo(squareLength)
+            })
         }
     }
 }
@@ -80,12 +94,13 @@ extension SquaredBoxView {
 // MARK: - Public
 extension SquaredBoxView {
     
-    func squareView(at index: Int) -> Square? {
-        return viewWithTag(originTag + index) as? Square
+    var squareLength: CGFloat {
+        let countPerLine = Int(sqrt(Double(squaresCount)))
+        return (sideLength - CGFloat(countPerLine - 1) * interval) / CGFloat(countPerLine)
     }
     
-    func showSquaresCount(_ count: UInt) {
-        shouldShowSquaresCount = count
-        setNeedsLayout()
+    func showSquaresCount(_ count: Int) {
+        let squares = dequeueNeededSquares(Int(count))
+        relayoutSquares(squares)
     }
 }
