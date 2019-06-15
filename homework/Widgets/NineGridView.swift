@@ -12,8 +12,11 @@ class NineGridView: UIView {
     
     private let sideLength: CGFloat
     
-    init(sideLength v1: CGFloat) {
+    private let contentInset: UIEdgeInsets
+    
+    init(sideLength v1: CGFloat, contentInset v2: UIEdgeInsets = .zero) {
         sideLength = v1
+        contentInset = v2
         super.init(frame: .zero)
         initializeSubviews()
     }
@@ -39,7 +42,7 @@ extension NineGridView {
         })
         addSubview(gridView)
         gridView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(contentInset)
         }
     }
 }

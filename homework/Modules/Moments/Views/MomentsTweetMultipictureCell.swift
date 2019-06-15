@@ -17,7 +17,7 @@ class MomentsTweetMultipictureCell: MomentsTweetCell<MomentsTweetMultipictureCel
     
     private let contentLabel = UILabel(.withHex(0x222222), .regularFont(ofSize: 18), numberOfLines: 0)
     
-    private let pictureView = NineGridView(sideLength: 250)
+    private let pictureView = NineGridView(sideLength: 250, contentInset: UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -30,7 +30,7 @@ class MomentsTweetMultipictureCell: MomentsTweetCell<MomentsTweetMultipictureCel
         
         canvasView.addSubview(pictureView)
         pictureView.snp.makeConstraints { (make) in
-            make.top.equalTo(contentLabel.snp.bottom).offset(10)
+            make.top.equalTo(contentLabel.snp.bottom)
             make.leading.bottom.equalToSuperview()
         }
     }
