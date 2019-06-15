@@ -15,9 +15,9 @@ class MomentsTweetCell<Content>: UITableViewCell {
     
     struct Model {
         let avatarURL: URL?
-        let nickname: String?
+        let nickname: String
         let content: Content
-        let comments: [Moments.Comment]?
+        let comments: [MomentsTweetCommentsView.Comment]?
     }
     
     /// 渲染数据模型
@@ -43,7 +43,6 @@ class MomentsTweetCell<Content>: UITableViewCell {
         selectionStyle = .none
         contentView.backgroundColor = .white
         
-        avatarView.backgroundColor = .blue
         contentView.addSubview(avatarView)
         avatarView.snp.makeConstraints { (make) in
             make.top.equalTo(contentView).offset(15).priority(.high)

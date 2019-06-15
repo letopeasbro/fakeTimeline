@@ -30,5 +30,9 @@ extension User {
             case nickname = "nick"
             case avatarPath = "avatar"
         }
+        
+        var showName: String? {
+            return nickname ?? username
+        }
     }
 }

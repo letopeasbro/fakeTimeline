@@ -134,16 +134,23 @@ extension MomentsTweetProvider {
 // MARK: - Map Model
 extension MomentsTweetProvider {
     
+    private typealias CommentModel = MomentsTweetCommentsView.Comment
     private typealias TextModel = MomentsTweetTextCell.Model
     private typealias PhotoModel = MomentsTweetPhotoCell.Model
     private typealias MultipictureModel = MomentsTweetMultipictureCell.Model
     
+    private func mapCommentModel(_ comment: Moments.Comment) -> CommentModel {
+        return CommentModel(senderName: comment.sender?.showName ?? " ",
+                            receiverName: nil,
+                            content: comment.content ?? " ")
+    }
+    
     private func mapTextModel(_ tweet: Tweet) -> TextModel {
         assert(tweet.content != nil, "Tweet必须有内容")
         return TextModel(avatarURL: URL(string: tweet.sender?.avatarPath ?? ""),
-                         nickname: tweet.sender?.nickname,
+                         nickname: tweet.sender?.showName ?? " ",
                          content: tweet.content ?? " ",
-                         comments: tweet.comments)
+                         comments: tweet.comments?.map(mapCommentModel))
     }
     
     private func mapPhotoModel(_ tweet: Tweet) -> PhotoModel {
@@ -151,9 +158,9 @@ extension MomentsTweetProvider {
         let content = MomentsTweetPhotoCell.Content(text: tweet.content ?? " ",
                                                     photoURL: tweet.images?.first?.url)
         return PhotoModel(avatarURL: URL(string: tweet.sender?.avatarPath ?? ""),
-                          nickname: tweet.sender?.nickname,
+                          nickname: tweet.sender?.showName ?? " ",
                           content: content,
-                          comments: tweet.comments)
+                          comments: tweet.comments?.map(mapCommentModel))
     }
     
     private func mapMultipictureModel(_ tweet: Tweet) -> MultipictureModel {
@@ -162,9 +169,9 @@ extension MomentsTweetProvider {
         let content = MomentsTweetMultipictureCell.Content(text: tweet.content,
                                                            pictureURLs: urls)
         return MultipictureModel(avatarURL: URL(string: tweet.sender?.avatarPath ?? ""),
-                                 nickname: tweet.sender?.nickname,
+                                 nickname: tweet.sender?.showName ?? " ",
                                  content: content,
-                                 comments: tweet.comments)
+                                 comments: tweet.comments?.map(mapCommentModel))
     }
 }
 

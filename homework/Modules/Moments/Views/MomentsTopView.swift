@@ -59,7 +59,6 @@ extension MomentsTopView {
         layer.addSublayer(background)
         layer.masksToBounds = false
         
-        profileView.backgroundColor = .red
         addSubview(profileView)
         profileView.snp.makeConstraints { (make) in
             make.leading.trailing.equalToSuperview()
@@ -67,7 +66,6 @@ extension MomentsTopView {
             make.height.equalToSuperview()
         }
         
-        avatarView.backgroundColor = .blue
         addSubview(avatarView)
         avatarView.snp.makeConstraints { (make) in
             make.trailing.equalTo(-12)

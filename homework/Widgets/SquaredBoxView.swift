@@ -72,7 +72,6 @@ extension SquaredBoxView {
         for i in 0 ..< squaresCount {
             let squareView = Square()
             squareView.tag = originTag + i
-            squareView.backgroundColor = .white
             addSubview(squareView)
         }
     }

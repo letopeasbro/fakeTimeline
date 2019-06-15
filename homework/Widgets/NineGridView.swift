@@ -45,7 +45,6 @@ extension NineGridView {
         gridView.showSquaresCount(UInt(count))
         for (idx, url) in urls.enumerated() {
             print("下载图片:\(url)")
-            gridView.squareView(at: idx)?.backgroundColor = .red
         }
         layoutIfNeeded()
     }

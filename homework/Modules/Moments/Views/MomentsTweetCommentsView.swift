@@ -95,7 +95,13 @@ extension MomentsTweetCommentsView {
 // MARK: - Public
 extension MomentsTweetCommentsView {
     
-    func config(_ comments: [Moments.Comment]?) {
+    struct Comment {
+        let senderName: String
+        let receiverName: String?
+        let content: String
+    }
+    
+    func config(_ comments: [Comment]?) {
         let commentsCount = comments?.count ?? 0
         backgroundImageView.isHidden = commentsCount <= 0
         ensureReusableLabelsEnough(commentsCount)
@@ -103,7 +109,7 @@ extension MomentsTweetCommentsView {
         labels.enumerated().forEach { (idx, label) in
             guard let cmts = comments else { return }
             let comment = cmts[idx]
-            label.config(comment.sender?.nickname ?? "", receiverName: nil, text: comment.content ?? " ")
+            label.config(comment.senderName, receiverName: comment.senderName, text: comment.content)
         }
         relayoutLabels(labels)
     }
