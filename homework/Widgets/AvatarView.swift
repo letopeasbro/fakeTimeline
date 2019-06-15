@@ -31,7 +31,7 @@ extension AvatarView {
     /// - Parameters:
     ///   - url: 头像地址
     ///   - sideLength: 头像视图边长, 传入nil则使用bounds.height
-    func setAvatar(_ url: URL, sideLength: CGFloat? = nil) {
+    func setAvatar(_ url: URL?, sideLength: CGFloat? = nil) {
         
     }
 }

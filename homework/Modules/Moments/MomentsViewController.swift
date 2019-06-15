@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import MJRefresh
 
 class MomentsViewController: UIViewController {
     
-    private let topView = MomentsTopView(frame: CGRect(x: 0, y: -44, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
+    private let topView = MomentsTopView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainWidth, height: min(UIScreen.mainWidth, UIScreen.mainHeight)))
     
     private let tableView = MomentsTweetTableView()
+    
+    private let tweetProvider = MomentsTweetProvider()
     
     // MARK: Override
     
@@ -29,13 +32,9 @@ private extension MomentsViewController {
     func initializeSubviews() {
         view.backgroundColor = .white
         
-        if #available(iOS 11.0, *) {
-            tableView.contentInsetAdjustmentBehavior = .never
-        } else {
-            automaticallyAdjustsScrollViewInsets = false
-        }
-        
         tableView.tableHeaderView = topView
+        tableView.dataSource = tweetProvider
+        tableView.delegate = tweetProvider
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()

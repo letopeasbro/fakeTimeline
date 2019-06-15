@@ -18,17 +18,21 @@ class MomentsTweetTableView: UITableView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Private
+extension MomentsTweetTableView {
     
-    func initializeSubviews() {
+    private func initializeSubviews() {
         backgroundColor = .white
         showsHorizontalScrollIndicator = false
-        separatorStyle = .none
+        separatorInset = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
         estimatedRowHeight = 160.0
         estimatedSectionHeaderHeight = 0.0
         estimatedSectionFooterHeight = 0.0
-        register(MomentsTweetTextCell.self, forCellReuseIdentifier: "\(MomentsTweetTextCell.self)")
-        register(MomentsTweetPhotoCell.self, forCellReuseIdentifier: "\(MomentsTweetPhotoCell.self)")
-        register(MomentsTweetMultipictureCell.self, forCellReuseIdentifier: "\(MomentsTweetMultipictureCell.self)")
+        register(MomentsTweetTextCell.self)
+        register(MomentsTweetPhotoCell.self)
+        register(MomentsTweetMultipictureCell.self)
         tableFooterView = UIView()
     }
 }

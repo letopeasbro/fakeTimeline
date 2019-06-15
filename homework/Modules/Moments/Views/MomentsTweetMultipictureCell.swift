@@ -1,5 +1,5 @@
 //
-//  MomentsTweetPhotoCell.swift
+//  MomentsTweetMultipictureCell.swift
 //  homework
 //
 //  Created by 刘奕成 on 2019/6/13.
@@ -8,16 +8,16 @@
 
 import Foundation
 
-class MomentsTweetPhotoCell: MomentsTweetCell<MomentsTweetPhotoCell.Content> {
+class MomentsTweetMultipictureCell: MomentsTweetCell<MomentsTweetMultipictureCell.Content> {
     
     struct Content {
         let text: String?
-        let photoURL: URL?
+        let pictureURLs: [URL]
     }
     
     private let contentLabel = UILabel(.withHex(0x222222), .regularFont(ofSize: 18), numberOfLines: 0)
     
-    private let photoView = UIImageView()
+    private let pictureView = NineGridView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,10 +28,11 @@ class MomentsTweetPhotoCell: MomentsTweetCell<MomentsTweetPhotoCell.Content> {
             make.leading.top.trailing.equalToSuperview()
         }
         
-        canvasView.addSubview(photoView)
-        photoView.snp.makeConstraints { (make) in
+        canvasView.addSubview(pictureView)
+        pictureView.snp.makeConstraints { (make) in
             make.top.equalTo(contentLabel.snp.bottom).offset(10)
-            make.leading.bottom.trailing.equalToSuperview()
+            make.width.equalTo(250)
+            make.leading.bottom.equalToSuperview()
         }
     }
     
@@ -40,7 +41,7 @@ class MomentsTweetPhotoCell: MomentsTweetCell<MomentsTweetPhotoCell.Content> {
         
         model.subscribeNext(on: { [unowned self] model in
             self.contentLabel.text = model.content.text
-            print("下载图片:\(model.content.photoURL)")
+            self.pictureView.requestPictures(model.content.pictureURLs)
         }).disposed(by: rx.dsbag)
     }
 }

@@ -10,12 +10,8 @@ import UIKit
 
 class MomentsTopView: UIView {
     
-    /// 封面收起的高度
-    private let packupHeight: CGFloat
-
-    init() {
-        packupHeight = 55.0
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.mainWidth, height: UIScreen.mainHeight - packupHeight))
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         initializeSubviews()
     }
     
@@ -23,36 +19,15 @@ class MomentsTopView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let profileView: UIImageView = {
+    private let background = CALayer()
+    
+    private let profileView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFill
         return v
     }()
     
-    let avatarView = AvatarView(cornerRadius: 5.0)
-    
-    func initializeSubviews() {
-        backgroundColor = .withHex(0x888888)
-        
-        let background = CALayer()
-        background.backgroundColor = UIColor(hexValue: 0x333333).cgColor
-        background.frame = CGRect(x: 0, y: -packupHeight - UIScreen.mainHeight, width: UIScreen.mainWidth, height: UIScreen.mainHeight + packupHeight)
-        layer.addSublayer(background)
-        layer.masksToBounds = false
-        
-        profileView.frame = CGRect(x: 0, y: -packupHeight, width: UIScreen.mainWidth, height: UIScreen.mainHeight)
-        addSubview(profileView)
-        profileView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-        
-        addSubview(avatarView)
-        avatarView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(profileView).offset(20)
-            make.trailing.equalTo(-12)
-            make.size.equalTo(70)
-        }
-    }
+    private let avatarView = AvatarView(cornerRadius: 5.0)
     
     // MARK: Override
     
@@ -61,5 +36,43 @@ class MomentsTopView: UIView {
             return avatarView
         }
         return super.hitTest(point, with: event)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let regular = max(UIScreen.mainWidth, UIScreen.mainHeight)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        background.frame = CGRect(x: 0, y: -regular, width: regular, height: regular)
+        CATransaction.commit()
+    }
+}
+
+// MARK: - Private
+extension MomentsTopView {
+    
+    private func initializeSubviews() {
+        backgroundColor = .white
+        
+        background.backgroundColor = UIColor(hexValue: 0x333333).cgColor
+        layer.addSublayer(background)
+        layer.masksToBounds = false
+        
+        profileView.backgroundColor = .red
+        addSubview(profileView)
+        profileView.snp.makeConstraints { (make) in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(snp.top).offset(320)
+            make.height.equalToSuperview()
+        }
+        
+        avatarView.backgroundColor = .blue
+        addSubview(avatarView)
+        avatarView.snp.makeConstraints { (make) in
+            make.trailing.equalTo(-12)
+            make.bottom.equalTo(profileView).offset(20)
+            make.size.equalTo(70)
+        }
     }
 }
