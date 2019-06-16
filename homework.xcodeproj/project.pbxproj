@@ -25,6 +25,7 @@
 		9B209B8622B5E7E70084E2BF /* MomentsProfileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8522B5E7E70084E2BF /* MomentsProfileProvider.swift */; };
 		9B209B8822B5EAA80084E2BF /* UIImage+Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8722B5EAA80084E2BF /* UIImage+Transforms.swift */; };
 		9B209B8A22B5F5880084E2BF /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8922B5F5880084E2BF /* Network.swift */; };
+		9B209B8C22B60E1B0084E2BF /* WebImageHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8B22B60E1B0084E2BF /* WebImageHolder.swift */; };
 		9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884422B3FFEC005B65F6 /* Moments+Models.swift */; };
 		9B38884722B400FF005B65F6 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884622B400FE005B65F6 /* NSObject+Rx.swift */; };
 		9B38884922B40192005B65F6 /* Observable+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884822B40192005B65F6 /* Observable+Conveniences.swift */; };
@@ -94,6 +95,7 @@
 		9B209B8522B5E7E70084E2BF /* MomentsProfileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsProfileProvider.swift; sourceTree = "<group>"; };
 		9B209B8722B5EAA80084E2BF /* UIImage+Transforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Transforms.swift"; sourceTree = "<group>"; };
 		9B209B8922B5F5880084E2BF /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		9B209B8B22B60E1B0084E2BF /* WebImageHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageHolder.swift; sourceTree = "<group>"; };
 		9B38884422B3FFEC005B65F6 /* Moments+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moments+Models.swift"; sourceTree = "<group>"; };
 		9B38884622B400FE005B65F6 /* NSObject+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
 		9B38884822B40192005B65F6 /* Observable+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Conveniences.swift"; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			children = (
 				9B209B7A22B545E20084E2BF /* WebImageManager.swift */,
 				9B209B7C22B5492E0084E2BF /* WebImageLoader.swift */,
+				9B209B8B22B60E1B0084E2BF /* WebImageHolder.swift */,
 				9B209B7822B541760084E2BF /* UIImageView+WebImage.swift */,
 			);
 			path = WebImage;
@@ -621,6 +624,7 @@
 				9B38884F22B4107F005B65F6 /* UITableView+EasyReuse.swift in Sources */,
 				9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */,
 				9BB8027F22B2A1EE002C646C /* MomentsTweetMultipictureCell.swift in Sources */,
+				9B209B8C22B60E1B0084E2BF /* WebImageHolder.swift in Sources */,
 				9B209B5222B5071F0084E2BF /* BaseModels.swift in Sources */,
 				9B209B4522B4F0330084E2BF /* Moments.swift in Sources */,
 				9B209B4322B4F0190084E2BF /* User.swift in Sources */,

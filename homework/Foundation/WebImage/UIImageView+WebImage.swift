@@ -9,17 +9,19 @@
 import Foundation
 
 fileprivate struct AssociatedKeys {
-    static var webImageLoader = "UIImageView.webImageLoader"
+    static var webImageHolder = "UIImageView.webImageHolder"
 }
 
 extension UIImageView {
     
-    private var webImageLoader: WebImageLoader? {
+    private var webImageHolder: WebImageHolder? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.webImageLoader) as? WebImageLoader
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.webImageLoader, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            if let holder = objc_getAssociatedObject(self, &AssociatedKeys.webImageHolder) as? WebImageHolder {
+                return holder
+            }
+            let holder = WebImageHolder()
+            objc_setAssociatedObject(self, &AssociatedKeys.webImageHolder, holder, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            return holder
         }
     }
     
@@ -32,16 +34,6 @@ extension UIImageView {
     {
         self.image = placeholder
         guard let url = url else { return }
-        if let loader = webImageLoader {
-            loader.cancel()
-        }
-        let loader = WebImageManager.shared.requestImage(url, progress: progress, transform: transform) { [weak self] (image, url, fromType, state) in
-            self?.webImageLoader = nil
-            if case .canceled = state {
-                return
-            }
-            completion(image, url, fromType, state)
-        }
-        webImageLoader = loader
+        webImageHolder?.requestImage(url, progress: progress, transform: transform, completion: completion)
     }
 }

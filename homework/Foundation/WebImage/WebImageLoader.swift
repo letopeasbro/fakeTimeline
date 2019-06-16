@@ -27,6 +27,7 @@ class WebImageLoader: NSObject {
     private let request: URLRequest
     private let diskCacheURL: URL?
     
+    /// 图片加载进度回调, 目前未使用, 保留以便扩展
     typealias ProgressClosure = (Int64, Int64) -> Void
     private let progress: ProgressClosure?
     
@@ -35,8 +36,6 @@ class WebImageLoader: NSObject {
     
     typealias CompletionClosure = (UIImage?, URL?, WebImageLoadFromType, WebImageLoadState) -> Void
     private let completion: CompletionClosure
-    
-    private var isCanceled = false
     
     init(
         cacheKey v0: String,
@@ -54,12 +53,9 @@ class WebImageLoader: NSObject {
         completion = v5
     }
     
-    private lazy var session: URLSession = {
-        let queue = OperationQueue()
-        queue.qualityOfService = .background
-        let s = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: queue)
-        return s
-    }()
+    private var session: URLSession {
+        return URLSession.shared
+    }
     
     private var responseData = Data()
 }
@@ -95,7 +91,7 @@ extension WebImageLoader {
     
     private static var memoryCachedImages: [String: UIImage] = [:]
     
-    private static let memoryCacheLock = NSLock()
+    private static let memoryCacheLock = NSRecursiveLock()
     
     private static func cacheImage(_ image: UIImage, toMemory key: String) {
         defer {
@@ -129,14 +125,20 @@ extension WebImageLoader {
 extension WebImageLoader {
     
     private func handleDiskCachedImage(_ image: UIImage) {
-        guard let transformed = transform(image) else { return }
+        guard let transformed = transform(image) else {
+            done(nil, request.url, .none, .canceled)
+            return
+        }
         WebImageLoader.cacheImage(transformed, toMemory: cacheKey)
         done(transformed, request.url, .disk, .finished)
     }
     
     private func handleNetworkResponse(_ data: Data) {
         guard let image = UIImage(data: data, scale: UIScreen.main.scale) else { return }
-        guard let transformed = transform(image) else { return }
+        guard let transformed = transform(image) else {
+            done(nil, request.url, .none, .canceled)
+            return
+        }
         // 缓存存处理后的图片
         WebImageLoader.cacheImage(transformed, toMemory: cacheKey)
         done(transformed, request.url, .remote, .finished)
@@ -160,45 +162,16 @@ extension WebImageLoader {
             return
         }
         // network
-        session.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let strongSelf = self else { return }
+        session.dataTask(with: request) { (data, response, error) in
             if let d = data {
-                strongSelf.handleNetworkResponse(d)
+                self.handleNetworkResponse(d)
             } else {
-                strongSelf.done(nil, strongSelf.request.url, .none, .failed(error))
+                self.done(nil, self.request.url, .none, .failed(error))
             }
         }.resume()
     }
     
     func cancel() {
-        isCanceled = true
-        session.delegateQueue.cancelAllOperations()
         done(nil, request.url, .none, .canceled)
-    }
-}
-
-// MARK: - URLSessionDataDelegate
-extension WebImageLoader: URLSessionDataDelegate {
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        if isCanceled {
-            completionHandler(.cancel)
-        } else {
-            completionHandler(.allow)
-        }
-    }
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        responseData.append(data)
-        
-        guard let totalBytesExpectedToLoad = dataTask.response?.expectedContentLength else { return }
-        let totalBytesLoaded = responseData.count
-        DispatchQueue.main.async {
-            self.progress?(Int64(totalBytesLoaded), totalBytesExpectedToLoad)
-        }
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        done(nil, request.url, .none, .failed(error))
     }
 }

@@ -25,6 +25,8 @@ class WebImageManager: NSObject {
         }
         return url
     }()
+    
+    private let queue: DispatchQueue = DispatchQueue(label: "WebImageManager.queue", qos: .background, attributes: .concurrent)
 }
 
 // MARK: - Public
@@ -39,9 +41,10 @@ extension WebImageManager {
         let key = url.absoluteString.MD5
         var request = URLRequest(url: url)
         request.addValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
-        request.timeoutInterval = 10.0
         let loader = WebImageLoader(cacheKey: key, request: request, diskCacheURL: diskCacheURL, progress: progress, transform: transform, completion: completion)
-        loader.start()
+        queue.async { [weak loader] in
+            loader?.start()
+        }
         return loader
     }
 }
