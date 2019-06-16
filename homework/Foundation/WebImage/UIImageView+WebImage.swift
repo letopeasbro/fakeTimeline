@@ -32,8 +32,13 @@ extension UIImageView {
         transform: WebImageLoader.TransformClosure? = nil,
         completion: @escaping WebImageLoader.CompletionClosure)
     {
-        self.image = placeholder
-        guard let url = url else { return }
+        if let p = placeholder {
+            self.image = p
+        }
+        guard let url = url else {
+            self.image = placeholder
+            return
+        }
         webImageHolder?.requestImage(url, progress: progress, transform: transform, completion: completion)
     }
 }
