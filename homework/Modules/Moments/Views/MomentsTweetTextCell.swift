@@ -17,7 +17,6 @@ class MomentsTweetTextCell: MomentsTweetCell<MomentsTweetTextCell.Content> {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        contentLabel.preferredMaxLayoutWidth = UIScreen.mainWidth
         contentLabel.lineBreakMode = .byCharWrapping
         canvasView.addSubview(contentLabel)
         contentLabel.snp.makeConstraints { (make) in
