@@ -22,6 +22,8 @@
 		9B209B7B22B545E20084E2BF /* WebImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B7A22B545E20084E2BF /* WebImageManager.swift */; };
 		9B209B7D22B5492E0084E2BF /* WebImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B7C22B5492E0084E2BF /* WebImageLoader.swift */; };
 		9B209B7F22B54AA10084E2BF /* String+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B7E22B54AA10084E2BF /* String+Crypto.swift */; };
+		9B209B8622B5E7E70084E2BF /* MomentsProfileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8522B5E7E70084E2BF /* MomentsProfileProvider.swift */; };
+		9B209B8822B5EAA80084E2BF /* UIImage+Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B209B8722B5EAA80084E2BF /* UIImage+Transforms.swift */; };
 		9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884422B3FFEC005B65F6 /* Moments+Models.swift */; };
 		9B38884722B400FF005B65F6 /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884622B400FE005B65F6 /* NSObject+Rx.swift */; };
 		9B38884922B40192005B65F6 /* Observable+Conveniences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B38884822B40192005B65F6 /* Observable+Conveniences.swift */; };
@@ -88,6 +90,8 @@
 		9B209B7A22B545E20084E2BF /* WebImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageManager.swift; sourceTree = "<group>"; };
 		9B209B7C22B5492E0084E2BF /* WebImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageLoader.swift; sourceTree = "<group>"; };
 		9B209B7E22B54AA10084E2BF /* String+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Crypto.swift"; sourceTree = "<group>"; };
+		9B209B8522B5E7E70084E2BF /* MomentsProfileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsProfileProvider.swift; sourceTree = "<group>"; };
+		9B209B8722B5EAA80084E2BF /* UIImage+Transforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Transforms.swift"; sourceTree = "<group>"; };
 		9B38884422B3FFEC005B65F6 /* Moments+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moments+Models.swift"; sourceTree = "<group>"; };
 		9B38884622B400FE005B65F6 /* NSObject+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
 		9B38884822B40192005B65F6 /* Observable+Conveniences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Conveniences.swift"; sourceTree = "<group>"; };
@@ -310,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				9BB8027322B2964F002C646C /* MomentsTweetProvider.swift */,
+				9B209B8522B5E7E70084E2BF /* MomentsProfileProvider.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				9B38884822B40192005B65F6 /* Observable+Conveniences.swift */,
 				9B38884E22B4107F005B65F6 /* UITableView+EasyReuse.swift */,
 				9B209B7E22B54AA10084E2BF /* String+Crypto.swift */,
+				9B209B8722B5EAA80084E2BF /* UIImage+Transforms.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -606,6 +612,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B209B8622B5E7E70084E2BF /* MomentsProfileProvider.swift in Sources */,
 				9B209B4A22B4F0F60084E2BF /* APIController.swift in Sources */,
 				9B38884F22B4107F005B65F6 /* UITableView+EasyReuse.swift in Sources */,
 				9B38884522B3FFEC005B65F6 /* Moments+Models.swift in Sources */,
@@ -627,6 +634,7 @@
 				9B38884922B40192005B65F6 /* Observable+Conveniences.swift in Sources */,
 				9BB8028622B2A524002C646C /* UILabel+Conveniences.swift in Sources */,
 				9BB8027922B296ED002C646C /* MomentsTweetCell.swift in Sources */,
+				9B209B8822B5EAA80084E2BF /* UIImage+Transforms.swift in Sources */,
 				9BB8028C22B2A8D8002C646C /* MomentsTweetCommentsView.swift in Sources */,
 				9BB8029322B2AEB2002C646C /* MomentsTopView.swift in Sources */,
 				9B209B7922B541760084E2BF /* UIImageView+WebImage.swift in Sources */,

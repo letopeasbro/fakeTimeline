@@ -11,7 +11,23 @@ import Foundation
 // MARK: - Profile
 extension User {
     
-    struct Profile: Decodable {}
+    struct Profile: Decodable {
+        
+        let profilePath: String?
+        
+        let avatarPath: String?
+        
+        let username: String?
+        
+        let nickname: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case profilePath = "profile-image"
+            case avatarPath = "avatar"
+            case nickname = "nick"
+            case username
+        }
+    }
 }
 
 // MARK: - Card

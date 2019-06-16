@@ -13,6 +13,8 @@ class MomentsViewController: UIViewController {
     
     private let topView = MomentsTopView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainWidth, height: min(UIScreen.mainWidth, UIScreen.mainHeight)))
     
+    private let profileProvider = MomentsProfileProvider()
+    
     private let tableView = MomentsTweetTableView()
     
     private let tweetProvider = MomentsTweetProvider()
@@ -23,6 +25,7 @@ class MomentsViewController: UIViewController {
         super.viewDidLoad()
         initializeSubviews()
         loadScripts()
+        profileProvider.updateProfile()
         tweetProvider.updateDataSource()
     }
 }
@@ -61,6 +64,8 @@ private extension MomentsViewController {
     }
     
     func loadScripts() {
+        profileProvider.profileModel.bind(to: topView.model).disposed(by: rx.dsbag)
+        
         tweetProvider.tweets.subscribeNext(on: { [unowned self] _ in
             self.tableView.reloadData()
         }).disposed(by: rx.dsbag)

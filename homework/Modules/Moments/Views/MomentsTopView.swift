@@ -13,6 +13,7 @@ class MomentsTopView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         initializeSubviews()
+        loadScripts()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -28,6 +29,16 @@ class MomentsTopView: UIView {
     }()
     
     private let avatarView = AvatarView(cornerRadius: 5.0)
+    
+    private let nameLabel = UILabel(.white, .semiboldFont(ofSize: 18))
+    
+    struct Model {
+        let profileURL: URL?
+        let avatarURL: URL?
+        let name: String?
+    }
+    
+    let model = PublishRelay<Model>()
     
     // MARK: Override
     
@@ -72,6 +83,29 @@ extension MomentsTopView {
             make.trailing.equalTo(-12)
             make.bottom.equalTo(profileView).offset(20)
             make.size.equalTo(70)
+        }
+        
+        addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(avatarView.snp.top).offset(25)
+            make.leading.greaterThanOrEqualToSuperview().priority(.low)
+            make.trailing.equalTo(avatarView.snp.leading).offset(-20)
+        }
+    }
+    
+    private func loadScripts() {
+        model.subscribeNext(on: { [unowned self] model in
+            self.setProfileImage(model.profileURL)
+            self.avatarView.setAvatar(model.avatarURL, sideLength: 70)
+            self.nameLabel.text = model.name
+        }).disposed(by: rx.dsbag)
+    }
+    
+    private func setProfileImage(_ url: URL?) {
+        profileView.setImage(url, placeholder: nil, progress: nil, transform: { (image) -> UIImage? in
+            return image.byResize(to: self.profileView.bounds.size)
+        }) { (image, _, _, _) in
+            self.profileView.image = image
         }
     }
 }
