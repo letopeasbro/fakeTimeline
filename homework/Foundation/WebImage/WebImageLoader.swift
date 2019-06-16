@@ -16,19 +16,12 @@ enum WebImageLoadFromType {
 }
 
 enum WebImageLoadState {
-    
     case finished
     case failed(Error?)
     case canceled
 }
 
 class WebImageLoader: NSObject {
-    
-    deinit {
-        #if DEBUG
-        print("\(request.url?.absoluteString ?? cacheKey) deinit")
-        #endif
-    }
     
     private let cacheKey: String
     private let request: URLRequest
@@ -73,6 +66,22 @@ class WebImageLoader: NSObject {
 
 // MARK: - Private
 extension WebImageLoader {
+    
+    func transform(_ image: UIImage) -> UIImage? {
+        var transformedImage: UIImage?
+        if let transformClosure = transform {
+            if pthread_main_np() != 0 {
+                transformedImage = transformClosure(image)
+            } else {
+                DispatchQueue.main.sync {
+                    transformedImage = transformClosure(image)
+                }
+            }
+        } else {
+            transformedImage = image
+        }
+        return transformedImage
+    }
     
     func done(_ image: UIImage?, _ url: URL?, _ fromType: WebImageLoadFromType, _ state: WebImageLoadState) {
         DispatchQueue.main.async {
@@ -120,29 +129,17 @@ extension WebImageLoader {
 extension WebImageLoader {
     
     private func handleDiskCachedImage(_ image: UIImage) {
-        let transformedImage: UIImage?
-        if let transformClosure = transform {
-            transformedImage = transformClosure(image)
-        } else {
-            transformedImage = image
-        }
-        guard let result = transformedImage else { return }
-        WebImageLoader.cacheImage(result, toMemory: cacheKey)
-        done(result, request.url, .disk, .finished)
+        guard let transformed = transform(image) else { return }
+        WebImageLoader.cacheImage(transformed, toMemory: cacheKey)
+        done(transformed, request.url, .disk, .finished)
     }
     
     private func handleNetworkResponse(_ data: Data) {
         guard let image = UIImage(data: data, scale: UIScreen.main.scale) else { return }
-        let transformedImage: UIImage?
-        if let transformClosure = transform {
-            transformedImage = transformClosure(image)
-        } else {
-            transformedImage = image
-        }
-        guard let result = transformedImage else { return }
+        guard let transformed = transform(image) else { return }
         // 缓存存处理后的图片
-        WebImageLoader.cacheImage(result, toMemory: cacheKey)
-        done(result, request.url, .remote, .finished)
+        WebImageLoader.cacheImage(transformed, toMemory: cacheKey)
+        done(transformed, request.url, .remote, .finished)
         // 硬盘存原图
         cacheImageData(data, toDisk: cacheKey)
     }
@@ -171,7 +168,6 @@ extension WebImageLoader {
                 strongSelf.done(nil, strongSelf.request.url, .none, .failed(error))
             }
         }.resume()
-        
     }
     
     func cancel() {
@@ -206,4 +202,3 @@ extension WebImageLoader: URLSessionDataDelegate {
         done(nil, request.url, .none, .failed(error))
     }
 }
-
