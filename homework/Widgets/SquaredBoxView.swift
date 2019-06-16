@@ -39,7 +39,6 @@ extension SquaredBoxView {
     private func initializeSubviews() {
         for _ in 0 ..< squaresCount {
             let squareView = Square()
-            addSubview(squareView)
             squareBox.append(squareView)
         }
     }
@@ -47,9 +46,9 @@ extension SquaredBoxView {
     private func dequeueNeededSquares(_ needs: Int) -> [Square] {
         let count = squareBox.count < needs ? squareBox.count : needs
         let squares = Array(squareBox[0 ..< count])
-        // 将未取出的Label约束清除
+        // 将未取出的视图移除
         Array(squareBox[count ..< squareBox.count]).forEach({
-            $0.constraints.forEach({ $0.isActive = false })
+            $0.removeFromSuperview()
         })
         return squares
     }
@@ -67,7 +66,8 @@ extension SquaredBoxView {
                     hConstraintItem = snp.leading
                 }
             }
-            guard square.constraints.count == 0 else { return }
+            guard square.superview == nil else { return }
+            addSubview(square)
             // 保证垂直方向上的间隔
             let topInset = i / countPerLine > 0 ? 5 : 0
             // 保证水平方向上的间隔
@@ -85,7 +85,7 @@ extension SquaredBoxView {
                 } else {
                     make.bottom.lessThanOrEqualToSuperview()
                 }
-                make.size.equalTo(squareLength)
+                make.size.equalTo(squareLength).priority(.high)
             })
         }
     }
