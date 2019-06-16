@@ -100,4 +100,41 @@ class homeworkTests: XCTestCase {
         
         self.wait(for: [exception], timeout: 10)
     }
+    
+    func testWebImage() {
+        let views = [UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView()]
+        var urls = [URL]()
+        for i in 1 ... 21 {
+            urls.append(URL(string: String(format: "https://thoughtworks-mobile-2018.herokuapp.com/images/tweets/%03d.jpeg", i))!)
+        }
+        var urlMaps: [UIImageView: [URL]] = [:]
+        for (idx, view) in views.enumerated() {
+            switch idx {
+            case 0:
+                urlMaps[view] = Array(urls[0 ..< 3])
+            case 1:
+                urlMaps[view] = Array(urls[3 ..< 12])
+            case 2:
+                urlMaps[view] = Array(urls[12 ..< 13])
+            case 3:
+                urlMaps[view] = Array(urls[13 ..< 18])
+            case 4:
+                urlMaps[view] = Array(urls[18 ..< 21])
+            default:
+                fatalError()
+            }
+        }
+        let operation = self.expectation(description: "testWebImage")
+        operation.expectedFulfillmentCount = 5
+        for (view, urls) in urlMaps {
+            urls.forEach({
+                view.setImage($0, placeholder: nil, completion: { (image, url, _, state) in
+                    XCTAssert(url == urls.last)
+                    operation.fulfill()
+                })
+            })
+        }
+        
+        self.wait(for: [operation], timeout: 100.0)
+    }
 }
