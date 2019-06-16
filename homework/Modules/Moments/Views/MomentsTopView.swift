@@ -25,6 +25,7 @@ class MomentsTopView: UIView {
     private let profileView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     

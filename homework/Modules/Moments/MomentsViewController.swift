@@ -28,6 +28,12 @@ class MomentsViewController: UIViewController {
         profileProvider.updateProfile()
         tweetProvider.updateDataSource()
     }
+    
+    @available(iOS 11.0, *)
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        tableView.mj_header?.ignoredScrollViewContentInsetTop = view.safeAreaInsets.top
+    }
 }
 
 // MARK: - Private
