@@ -109,7 +109,7 @@ extension MomentsTweetCommentsView {
         labels.enumerated().forEach { (idx, label) in
             guard let cmts = comments else { return }
             let comment = cmts[idx]
-            label.config(comment.senderName, receiverName: comment.senderName, text: comment.content)
+            label.config(comment.senderName, receiverName: nil, text: comment.content)
         }
         relayoutLabels(labels)
     }

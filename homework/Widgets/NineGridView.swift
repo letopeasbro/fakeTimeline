@@ -55,6 +55,8 @@ extension NineGridView {
         gridView.showSquaresCount(count)
         for (idx, url) in urls.enumerated() {
             let imgView = gridView.squareBox[idx]
+            // 避免刷新前展示其他人的图片
+            imgView.image = nil
             imgView.setImage(url, placeholder: nil, transform: { (image) -> UIImage? in
                 let l = self.gridView.squareLength
                 return image.byResize(to: CGSize(width: l, height: l))

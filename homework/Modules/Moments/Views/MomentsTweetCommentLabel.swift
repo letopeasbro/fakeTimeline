@@ -33,7 +33,7 @@ extension MomentsTweetCommentLabel {
         } else {
             at = ""
         }
-        let plain = "\(sender)\(at)\(receiver)：\(text)"
+        let plain = "\(sender)\(at)\(receiver): \(text)"
         let content = NSMutableAttributedString(string: plain)
         let nameAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor(hexValue: 0x606FA3),
