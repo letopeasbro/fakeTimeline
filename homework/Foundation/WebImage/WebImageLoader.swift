@@ -93,7 +93,7 @@ extension WebImageLoader {
     
     private static let memoryCacheLock = NSRecursiveLock()
     
-    private static func cacheImage(_ image: UIImage, toMemory key: String) {
+    static func cacheImage(_ image: UIImage, toMemory key: String) {
         defer {
             memoryCacheLock.unlock()
         }
@@ -101,7 +101,7 @@ extension WebImageLoader {
         memoryCachedImages[key] = image
     }
     
-    private static func readImageFromMemory(_ key: String) -> UIImage? {
+    static func readImageFromMemory(_ key: String) -> UIImage? {
         return memoryCachedImages[key]
     }
 }

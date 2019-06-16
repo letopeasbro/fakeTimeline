@@ -31,9 +31,9 @@ class homeworkTests: XCTestCase {
         }
     }
     
-    let provider = MomentsTweetProvider()
-    
     func testPageTweets() {
+        let provider = MomentsTweetProvider()
+        
         let JSONData = try! Data(contentsOf: Bundle(for: homeworkTests.self).url(forResource: "tweets", withExtension: "json")!)
         let dataSource = try! JSONDecoder().decode([Moments.Tweet].self, from: JSONData)
         var next = 0
@@ -79,5 +79,25 @@ class homeworkTests: XCTestCase {
         XCTAssertTrue(tweets.last?.sender?.username == "hengzeng")
         XCTAssertTrue(tweets.count == 1)
         XCTAssertTrue(next == 22)
+    }
+    
+    func testWebImageMemoryMultithreadedCache() {
+        let queue = DispatchQueue(label: "testWebImageMemoryMultithreadedCache", attributes: .concurrent)
+        let image = UIImage(contentsOfFile: Bundle(for: homeworkTests.self).path(forResource: "test", ofType: "png")!)!
+        var count = 0
+        
+        let exception = self.expectation(description: "testWebImageMemoryMultithreadedCache")
+        
+        for i in 0 ..< 100 {
+            queue.async {
+                WebImageLoader.cacheImage(image, toMemory: "\(i)")
+                count += 1
+                if count == 100 {
+                    exception.fulfill()
+                }
+            }
+        }
+        
+        self.wait(for: [exception], timeout: 10)
     }
 }
