@@ -57,12 +57,7 @@ extension NineGridView {
             let imgView = gridView.squareBox[idx]
             imgView.setImage(url, placeholder: nil, transform: { (image) -> UIImage? in
                 let l = self.gridView.squareLength
-                let frame = CGRect(origin: .zero, size: CGSize(width: l, height: l))
-                UIGraphicsBeginImageContextWithOptions(frame.size, false, image.scale)
-                image.draw(in: frame)
-                let result = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                return result
+                return image.byResize(to: CGSize(width: l, height: l))
             }, completion: { (image, _, _, _) in
                 imgView.image = image
             })
