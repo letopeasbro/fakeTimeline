@@ -10,13 +10,13 @@ import Foundation
 
 class WebImageHolder: NSObject {
     
+    private(set) var theLastURL: URL?
+    
     private var progress: WebImageLoader.ProgressClosure?
     
     private var transform: WebImageLoader.TransformClosure?
     
     private var completion: WebImageLoader.CompletionClosure?
-    
-    private var theLastURL: URL?
     
     private var loaders: [URL: WebImageLoader] = [:]
 }
