@@ -104,7 +104,8 @@ extension MomentsTopView {
     
     private func setProfileImage(_ url: URL?) {
         profileView.setImage(url, placeholder: nil, progress: nil, transform: { (image) -> UIImage? in
-            return image.byResize(to: self.profileView.bounds.size)
+            let size = self.profileView.bounds.size
+            return image.byResize(to: size)
         }) { (image, _, _, _) in
             self.profileView.image = image
         }

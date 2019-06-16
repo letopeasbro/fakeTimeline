@@ -51,7 +51,6 @@ extension MomentsTweetCommentsView {
         var count = needs - reusableLabels.count
         while count > 0 {
             let label = Label()
-            addSubview(label)
             reusableLabels.append(label)
             count -= 1
         }
@@ -61,9 +60,9 @@ extension MomentsTweetCommentsView {
     private func dequeueNeededLabels(_ needs: Int) -> [Label] {
         assert(reusableLabels.count >= needs, "请确保可复用的Label足够")
         let labels = Array(reusableLabels[0 ..< needs])
-        // 将未取出的Label约束清除
+        // 将未取出的Label清除
         Array(reusableLabels[needs ..< reusableLabels.count]).forEach({
-            $0.constraints.forEach({ $0.isActive = false })
+            $0.removeFromSuperview()
         })
         return labels
     }
@@ -74,7 +73,8 @@ extension MomentsTweetCommentsView {
             defer {
                 last = label
             }
-            guard label.constraints.count == 0 else { return }
+            guard label.superview == nil else { return }
+            addSubview(label)
             label.snp.makeConstraints({ (make) in
                 if let theLast = last {
                     make.top.equalTo(theLast.snp.bottom)
