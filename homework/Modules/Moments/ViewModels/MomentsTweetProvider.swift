@@ -26,6 +26,8 @@ class MomentsTweetProvider: BaseViewModel {
     
     private let pageQueue = DispatchQueue(label: "MomentsTweetProvider.pageQueue")
     
+    private var dataSourceRequestBag = DisposeBag()
+    
     // MARK: Override
     
     override func loadScripts() {
@@ -179,9 +181,10 @@ extension MomentsTweetProvider {
 extension MomentsTweetProvider {
     
     func updateDataSource() {
+        dataSourceRequestBag = DisposeBag()
         Moments.provider.rx.request(.tweets)
             .map([Tweet].self)
-            .retry(3)
+            .retryWhen({ _ in Network.reachable })
             .filter({ (response) -> Bool in
                 // 就目前返回的数据模型分析, 以是否存在可用数据判断结果是否有效
                 return response.count > 0
@@ -194,7 +197,7 @@ extension MomentsTweetProvider {
                     }
                 }
             })
-            .disposed(by: rx.dsbag)
+            .disposed(by: dataSourceRequestBag)
     }
 }
 

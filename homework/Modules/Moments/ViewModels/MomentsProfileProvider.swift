@@ -18,6 +18,8 @@ class MomentsProfileProvider: BaseViewModel {
     
     private let profile = BehaviorRelay<Profile?>(value: nil)
     
+    private var profileRequestBag = DisposeBag()
+    
     // MARK: Override
     
     override func loadScripts() {
@@ -43,12 +45,13 @@ extension MomentsProfileProvider {
 extension MomentsProfileProvider {
     
     func updateProfile() {
+        profileRequestBag = DisposeBag()
         User.provider.rx.request(.profile)
             .map(Profile.self)
-            .retry(3)
+            .retryWhen({ _ in Network.reachable })
             .subscribe(onSuccess: { [unowned self] (profile) in
                 self.profile.accept(profile)
             })
-            .disposed(by: rx.dsbag)
+            .disposed(by: profileRequestBag)
     }
 }
