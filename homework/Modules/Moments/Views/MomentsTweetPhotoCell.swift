@@ -8,11 +8,14 @@
 
 import Foundation
 
+// 用来展示单图片Tweet的类(参考微信), 但数据模型里没有宽高参数, 异步加载图片后再刷新cell的效果也不好, 就暂时搁置
 class MomentsTweetPhotoCell: MomentsTweetCell<MomentsTweetPhotoCell.Content> {
     
     struct Content {
         let text: String?
         let photoURL: URL?
+        let width: CGFloat
+        let height: CGFloat
     }
     
     private let contentLabel = UILabel(.withHex(0x222222), .regularFont(ofSize: 18), numberOfLines: 0)

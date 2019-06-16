@@ -110,7 +110,6 @@ extension MomentsTweetProvider {
     private enum ModelType {
         case invalid
         case text
-        case photo
         case multipicture
         
         init(_ tweet: Tweet) {
@@ -118,9 +117,7 @@ extension MomentsTweetProvider {
             let imagesCount = tweet.images?.count ?? 0
             if content == nil && imagesCount <= 0 {
                 self = .invalid
-            } else if imagesCount == 1 {
-                self = .photo
-            } else if imagesCount > 1 {
+            } else if imagesCount > 0 {
                 self = .multipicture
             } else {
                 self = .text
@@ -138,7 +135,6 @@ extension MomentsTweetProvider {
     
     private typealias CommentModel = MomentsTweetCommentsView.Comment
     private typealias TextModel = MomentsTweetTextCell.Model
-    private typealias PhotoModel = MomentsTweetPhotoCell.Model
     private typealias MultipictureModel = MomentsTweetMultipictureCell.Model
     
     private func mapCommentModel(_ comment: Moments.Comment) -> CommentModel {
@@ -155,19 +151,9 @@ extension MomentsTweetProvider {
                          comments: tweet.comments?.map(mapCommentModel))
     }
     
-    private func mapPhotoModel(_ tweet: Tweet) -> PhotoModel {
-        assert(tweet.images?.count == 1, "照片Tweet图片数量为1(参考微信)")
-        let content = MomentsTweetPhotoCell.Content(text: tweet.content ?? " ",
-                                                    photoURL: tweet.images?.first?.url)
-        return PhotoModel(avatarURL: URL(string: tweet.sender?.avatarPath ?? ""),
-                          nickname: tweet.sender?.showName ?? " ",
-                          content: content,
-                          comments: tweet.comments?.map(mapCommentModel))
-    }
-    
     private func mapMultipictureModel(_ tweet: Tweet) -> MultipictureModel {
         let urls = tweet.images?.map({ $0.url }) ?? []
-        assert(urls.count > 1, "九宫格Tweet图片数量应该大于1张(参考微信)")
+        assert(urls.count > 0, "九宫格Tweet图片数量应该大于0张")
         let content = MomentsTweetMultipictureCell.Content(text: tweet.content,
                                                            pictureURLs: urls)
         return MultipictureModel(avatarURL: URL(string: tweet.sender?.avatarPath ?? ""),
@@ -221,10 +207,6 @@ extension MomentsTweetProvider: UITableViewDataSource {
         case .text:
             let cell: MomentsTweetTextCell = tableView.dequeueReusableCell()
             cell.model.accept(mapTextModel(tweet))
-            return cell
-        case .photo:
-            let cell: MomentsTweetPhotoCell = tableView.dequeueReusableCell()
-            cell.model.accept(mapPhotoModel(tweet))
             return cell
         case .multipicture:
             let cell: MomentsTweetMultipictureCell = tableView.dequeueReusableCell()
